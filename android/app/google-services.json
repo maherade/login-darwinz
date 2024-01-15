@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "237824966932",
+    "project_id": "darwinz-login",
+    "storage_bucket": "darwinz-login.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237824966932:android:8e70f3161dcaa7e94a8201",
+        "android_client_info": {
+          "package_name": "com.example.login_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtfm3MGD7Nzk1OU76BYdBpI1NKQTY2ZUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
