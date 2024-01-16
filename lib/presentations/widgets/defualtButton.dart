@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DefaultButton extends StatelessWidget {
   final String buttonText;
@@ -24,8 +25,6 @@ class DefaultButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.sizeOf(context).width*.3,
-      height: MediaQuery.sizeOf(context).height*.06,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radies!),
         gradient: LinearGradient(
@@ -36,6 +35,12 @@ class DefaultButton extends StatelessWidget {
               color2!,
             ]),
       ),
+      constraints: BoxConstraints(
+        maxWidth: 70.w,
+        minWidth: 65.w,
+        minHeight: MediaQuery.sizeOf(context).height * .05,
+      ),
+
       child: MaterialButton(
         onPressed: (){
           onPressed();

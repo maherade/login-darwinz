@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:login_task/business_logic/cubit/app_cubit.dart';
 import 'package:login_task/presentations/screens/home_screen/home_screen.dart';
 import 'package:login_task/presentations/widgets/default_text_field.dart';
@@ -56,7 +57,7 @@ class SignUpScreen extends StatelessWidget {
                 ],
               )),
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding:   EdgeInsets.all(MediaQuery.sizeOf(context).width * .05),
                 child: Form(
                   key: formKey,
                   child: SingleChildScrollView(
@@ -77,7 +78,7 @@ class SignUpScreen extends StatelessWidget {
                         Text(
                           "Sign Up",
                           style: TextStyle(
-                            fontSize: MediaQuery.sizeOf(context).width * .02,
+                            fontSize: 5.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -117,8 +118,8 @@ class SignUpScreen extends StatelessWidget {
                                 color: Colors.blue,
                               )
                             : DefaultButton(
-                                width: MediaQuery.sizeOf(context).width * .3,
-                                buttonText: "Sign Up ",
+                          width: MediaQuery.sizeOf(context).width >=150? MediaQuery.sizeOf(context).width * .3 : MediaQuery.sizeOf(context).width * .2,
+                          buttonText: "Sign Up ",
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
                                     cubit.createAccountWithFirebaseAuth(

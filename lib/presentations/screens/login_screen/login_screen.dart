@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:login_task/business_logic/cubit/app_cubit.dart';
+import 'package:login_task/core/local/cash_helper.dart';
 import 'package:login_task/presentations/screens/home_screen/home_screen.dart';
 import 'package:login_task/presentations/screens/signup_screen/signup_screen.dart';
 import 'package:login_task/styles/colors/color_manager.dart';
@@ -54,7 +56,9 @@ class LoginScreen extends StatelessWidget {
                 ],
               )),
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.sizeOf(context).width * .05,
+                    vertical: MediaQuery.sizeOf(context).height * .05),
                 child: Form(
                   key: formKey,
                   child: SingleChildScrollView(
@@ -75,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                         Text(
                           "Login",
                           style: TextStyle(
-                            fontSize: MediaQuery.sizeOf(context).width * .02,
+                            fontSize: 5.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -141,7 +145,15 @@ class LoginScreen extends StatelessWidget {
                               )
                             : GestureDetector(
                                 onTap: () {
-                                  cubit.signInWithGoogle();
+                                  cubit.signInWithGoogle().then((value) {
+                                    cubit.getCompanies(
+                                        userId:
+                                            CashHelper.getData(key: "isUid"));
+                                    // cubit.getBranches(
+                                    //     userId: CashHelper.getData(
+                                    //   key: "isUid",
+                                    // ));
+                                  });
                                 },
                                 child: Container(
                                   width: MediaQuery.sizeOf(context).width * .3,

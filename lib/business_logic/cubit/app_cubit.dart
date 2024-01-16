@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:login_task/data/models/branch_model.dart';
+import 'package:login_task/data/models/company_model.dart';
 import '../../constants/firebase_errors.dart';
 import '../../core/local/cash_helper.dart';
 import '../../data/models/user_model.dart';
@@ -143,6 +145,7 @@ class AppCubit extends Cubit<AppState> {
 
       // Once signed in, return the UserCredential
       await FirebaseAuth.instance.signInWithCredential(credential);
+      CashHelper.saveData(key: "isUid", value: googleUser.id);
       emit(LoginSuccessState());
     } catch (error) {
       emit(LoginErrorState());
@@ -150,50 +153,45 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-// final FirebaseAuth auth = FirebaseAuth.instance;
-// final GoogleSignIn googleSignIn = GoogleSignIn();
-// UserModel? login;
-//
-// Future<String> signInWithGoogle() async {
-//   emit(LoginWithGoogleLoadingState());
-//
-//   GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-//   final GoogleSignInAuthentication googleSignInAuthentication =
-//       await googleSignInAccount!.authentication;
-//   final AuthCredential credential = GoogleAuthProvider.credential(
-//     accessToken: googleSignInAuthentication.accessToken,
-//     idToken: googleSignInAuthentication.idToken,
-//   );
-//   final UserCredential authResult =
-//       await auth.signInWithCredential(credential);
-//   final User? user = authResult.user;
-//   if (user != null) {
-//     assert(user.email != null);
-//     assert(user.displayName != null);
-//      var name = user.displayName;
-//     var email = user.email;
-//      assert(!user.isAnonymous);
-//     assert(await user.getIdToken() != null);
-//     final User? currentUser = auth.currentUser;
-//     assert(user.uid == currentUser!.uid);
-//     print('signInWithGoogle succeeded: $user');
-//     DioHelper.postData(
-//       url: "auth/social/google",
-//       data: {
-//         "name": user.displayName,
-//         "email": user.email,
-//         "google_token": user.uid
-//       },
-//     ).then((value) {
-//       login = UserModel.fromJson(value.data);
-//       CashHelper.saveData(key: "google", value: true);
-//       emit(LoginWithGoogleSuccessState());
-//     }).catchError((e) {
-//       emit(LoginWithGoogleSuccessState());
-//     });
-//     return '$user';
-//   }
-//
-//   return "";
-// }
+  signOut() async {
+    emit(SignOutLoadingState());
+    await FirebaseAuth.instance.signOut();
+    emit(SignOutSuccessState());
+  }
+
+  CompanyModel? companyModel;
+
+  Future<void>getCompanies({required String userId}) async {
+    emit(GetCompaniesLoadingState());
+    getUser();
+    getUsersCollection().doc(userId).collection('My Company').get().then((value) {
+      print(value.docs);
+      value.docs.forEach((element) {
+        companyModel = CompanyModel.fromJson(element.data());
+        print(companyModel!.name);
+        print(companyModel!.logo);
+      });
+      emit(GetCompaniesSuccessState());
+
+    }).catchError((error) {
+      emit(GetCompaniesErrorState());
+    });
+  }
+
+  BranchModel ? branchModel;
+ Future<void> getBranches({required String userId}) async {
+   emit(GetBranchesLoadingState());
+   getUser();
+   getUsersCollection().doc(userId).collection('My Company').doc(companyModel!.uId).collection("Branchs").get().then((value) {
+     print(value.docs);
+     value.docs.forEach((element) {
+       branchModel = BranchModel.fromJson(element.data());
+       print(branchModel!.name!);
+     });
+     emit(GetBranchesSuccessState());
+   }).catchError((error) {
+     print(error);
+     emit(GetBranchesErrorState());
+   });
+ }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:login_task/styles/colors/color_manager.dart';
 
 class DefaultTextField extends StatefulWidget {
@@ -40,15 +41,22 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
   Widget build(BuildContext context) {
     return widget.isPass == false
         ? Container(
-      width: MediaQuery.sizeOf(context).width*.3,
-            padding: const EdgeInsets.symmetric(
+      width: MediaQuery.sizeOf(context).width >=150? MediaQuery.sizeOf(context).width * .3 : MediaQuery.sizeOf(context).width * .2,
+
+      padding: const EdgeInsets.symmetric(
               vertical: 0,
               horizontal: 0,
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
             ),
-            child: TextFormField(
+      constraints: BoxConstraints(
+        maxWidth: 70.w,
+        minWidth: 65.w,
+      ),
+
+
+      child: TextFormField(
               textInputAction: TextInputAction.next,
               style: const TextStyle(
                 fontSize: 16.0,
@@ -97,7 +105,8 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
             ),
           )
         : Container(
-      width: MediaQuery.sizeOf(context).width*.3,
+      width: MediaQuery.sizeOf(context).width >=150? MediaQuery.sizeOf(context).width * .3 : MediaQuery.sizeOf(context).width * .2,
+
       padding: const EdgeInsets.symmetric(
               vertical: 0,
               horizontal: 0,
@@ -105,7 +114,12 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
             ),
-            child: TextFormField(
+      constraints: BoxConstraints(
+        maxWidth: 70.w,
+        minWidth: 65.w,
+      ),
+
+             child: TextFormField(
               textInputAction: TextInputAction.done,
               style: const TextStyle(
                 fontSize: 15.0,
@@ -131,7 +145,7 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
                   ),
                   errorStyle: const TextStyle(
                     fontSize: 13.0,
-                    color: ColorManager.redColor ,
+                    color: ColorManager.redColor,
                   ),
                   fillColor: Colors.white,
                   filled: true,
