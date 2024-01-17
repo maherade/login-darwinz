@@ -24,12 +24,9 @@ class LoginScreen extends StatelessWidget {
           passwordController.clear();
           AppCubit.get(context).getCompanies();
           AppCubit.get(context).getBranches();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-          );
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ), (route) => false );
         }
 
         if (state is LoginSuccessState) {
@@ -176,7 +173,7 @@ class LoginScreen extends StatelessWidget {
                             const Text("Don't have an account?"),
                             TextButton(
                                 onPressed: () {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>

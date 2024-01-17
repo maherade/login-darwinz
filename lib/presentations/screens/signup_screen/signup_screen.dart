@@ -25,12 +25,9 @@ class SignUpScreen extends StatelessWidget {
           emailController.clear();
           passwordController.clear();
           nameController.clear();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-          );
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ), (route) => false );
         }
         if (state is LoginSuccessState) {
           Navigator.pushReplacement(
