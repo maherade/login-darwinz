@@ -6,6 +6,7 @@ import 'package:login_task/presentations/screens/home_screen/home_screen.dart';
 import 'package:login_task/presentations/widgets/default_text_field.dart';
 import 'package:login_task/presentations/widgets/defualtButton.dart';
 import 'package:login_task/styles/colors/color_manager.dart';
+import '../../../core/local/cash_helper.dart';
 import '../login_screen/login_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -127,6 +128,8 @@ class SignUpScreen extends StatelessWidget {
                                         passwordController.text,
                                         nameController.text);
                                   }
+                                  cubit.getCompanies();
+                                  cubit.getBranches();
                                 },
                               ),
                         SizedBox(

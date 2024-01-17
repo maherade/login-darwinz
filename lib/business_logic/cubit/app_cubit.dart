@@ -31,21 +31,19 @@ class AppCubit extends Cubit<AppState> {
         email: email,
         password: password,
       );
-      UserModel userModel = UserModel(
-        uId: credential.user?.uid ?? "",
+      await saveUser(
         name: name,
         email: email,
-      );
-      await getUsersCollection()
-          .doc(userModel.uId)
-          .set(userModel)
-          .then((value) {
-        emit(SignUpSuccessState());
+        id: (credential.user?.uid)!,
+      ).then((value) {
+        getUser(id: (credential.user?.uid)!);
+        CashHelper.saveData(key: 'isUid', value: credential.user?.uid);
         customToast(
-          title: 'Account Created Successfully',
-          color: Colors.blue,
+          title: "account_created_successfully",
+          color: Colors.green.shade700,
         );
-        print("--------------Account Created");
+        emit(SignUpSuccessState());
+        debugPrint("--------------Account Created");
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == FirebaseErrors.weakPassword) {
@@ -77,6 +75,30 @@ class AppCubit extends Cubit<AppState> {
         );
   }
 
+  Future<void> saveUser({
+    required String name,
+    required String email,
+    required String id,
+  }) async {
+    emit(SaveUserLoadingState());
+    UserModel userModel = UserModel(
+      uId: id,
+      name: name,
+      email: email,
+    );
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userModel.uId)
+        .set(userModel.toJson())
+        .then((value) {
+      debugPrint('Save User Success');
+      emit(SaveUserSuccessState());
+    }).catchError((error) {
+      debugPrint('Error in user Register is ${error.toString()}');
+      emit(SaveUserErrorState());
+    });
+  }
+
   // Login using email and password
   Future<void> loginWithFirebaseAuth(String email, String password) async {
     try {
@@ -89,7 +111,7 @@ class AppCubit extends Cubit<AppState> {
           await readUserFromFireStore(credential.user?.uid ?? "");
       if (userModel != null) {
         CashHelper.saveData(key: 'isUid', value: credential.user?.uid);
-        await getUser();
+        await getUser(id: "${CashHelper.getData(key: "isUid")}");
         print(CashHelper.getData(key: 'isUid'));
         emit(LoginSuccessState());
         print("-----------Login Successfully");
@@ -98,7 +120,6 @@ class AppCubit extends Cubit<AppState> {
     } on FirebaseAuthException catch (e) {
       emit(LoginErrorState());
       print("-----------Login Failed");
-
       customToast(
           title: 'Invalid email or password', color: ColorManager.redColor);
     } catch (e) {
@@ -110,13 +131,9 @@ class AppCubit extends Cubit<AppState> {
   // Get User From FireStore without parameters using ID
   UserModel? user;
 
-  Future<void> getUser() async {
+  Future<void> getUser({required String id}) async {
     emit(GetUserLoadingState());
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc('${CashHelper.getData(key: 'isUid')}')
-        .get()
-        .then((value) {
+    FirebaseFirestore.instance.collection('Users').doc(id).get().then((value) {
       user = UserModel.fromJson(value.data()!);
       print(user!.name);
       emit(GetUserSuccessState());
@@ -125,6 +142,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
+  // Login with Google
   Future signInWithGoogle() async {
     // Trigger the authentication flow
     emit(LoginLoadingState());
@@ -153,6 +171,7 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
+  // Sign Out
   signOut() async {
     emit(SignOutLoadingState());
     await FirebaseAuth.instance.signOut();
@@ -161,37 +180,43 @@ class AppCubit extends Cubit<AppState> {
 
   CompanyModel? companyModel;
 
-  Future<void>getCompanies({required String userId}) async {
+  Future<void> getCompanies() async {
     emit(GetCompaniesLoadingState());
-    getUser();
-    getUsersCollection().doc(userId).collection('My Company').get().then((value) {
-      print(value.docs);
-      value.docs.forEach((element) {
-        companyModel = CompanyModel.fromJson(element.data());
-        print(companyModel!.name);
-        print(companyModel!.logo);
-      });
+    getUser(id: CashHelper.getData(key: "isUid"));
+    FirebaseFirestore.instance
+        .collection("My Company")
+        .doc(CashHelper.getData(key: "isUid"))
+        .get()
+        .then((value) {
+      companyModel = CompanyModel.fromJson(value.data()!);
       emit(GetCompaniesSuccessState());
-
+      print("Company Name is : ${companyModel!.name}");
+      print("Company Logo is : ${companyModel!.logo}");
     }).catchError((error) {
+      companyModel = CompanyModel(uId: " ", name: " ", logo: " ");
       emit(GetCompaniesErrorState());
+      print("error in get Companies is : $error");
     });
   }
 
-  BranchModel ? branchModel;
- Future<void> getBranches({required String userId}) async {
-   emit(GetBranchesLoadingState());
-   getUser();
-   getUsersCollection().doc(userId).collection('My Company').doc(companyModel!.uId).collection("Branchs").get().then((value) {
-     print(value.docs);
-     value.docs.forEach((element) {
-       branchModel = BranchModel.fromJson(element.data());
-       print(branchModel!.name!);
-     });
-     emit(GetBranchesSuccessState());
-   }).catchError((error) {
-     print(error);
-     emit(GetBranchesErrorState());
-   });
- }
+  BranchModel? branchModel;
+
+  Future<void> getBranches() async {
+    emit(GetBranchesLoadingState());
+    getUser(id: CashHelper.getData(key: "isUid"));
+    FirebaseFirestore.instance
+        .collection("Branchs")
+        .doc(CashHelper.getData(key: "isUid"))
+        .get()
+        .then((value) {
+      branchModel = BranchModel.fromJson(value.data()!);
+      emit(GetBranchesSuccessState());
+      print("Branch Name is : ${branchModel!.name}");
+      print("Branch Logo is : ${branchModel!.logo}");
+    }).catchError((error) {
+      branchModel = BranchModel(uId: " ", name: " ", logo: " ");
+      emit(GetBranchesErrorState());
+      print("error in get Branchs is : $error");
+    });
+  }
 }

@@ -22,6 +22,8 @@ class LoginScreen extends StatelessWidget {
         if (state is LoginSuccessState) {
           emailController.clear();
           passwordController.clear();
+          AppCubit.get(context).getCompanies();
+          AppCubit.get(context).getBranches();
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -31,6 +33,8 @@ class LoginScreen extends StatelessWidget {
         }
 
         if (state is LoginSuccessState) {
+          AppCubit.get(context).getCompanies();
+          AppCubit.get(context).getBranches();
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -145,15 +149,7 @@ class LoginScreen extends StatelessWidget {
                               )
                             : GestureDetector(
                                 onTap: () {
-                                  cubit.signInWithGoogle().then((value) {
-                                    cubit.getCompanies(
-                                        userId:
-                                            CashHelper.getData(key: "isUid"));
-                                    // cubit.getBranches(
-                                    //     userId: CashHelper.getData(
-                                    //   key: "isUid",
-                                    // ));
-                                  });
+                                  cubit.signInWithGoogle();
                                 },
                                 child: Container(
                                   width: MediaQuery.sizeOf(context).width * .3,

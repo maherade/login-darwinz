@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_task/business_logic/cubit/app_cubit.dart';
-import 'package:login_task/constants/constatnts.dart';
 import 'package:login_task/core/local/cash_helper.dart';
 import 'package:login_task/presentations/widgets/branch_widget.dart';
 import 'package:login_task/styles/colors/color_manager.dart';
-
 import '../login_screen/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,25 +16,25 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    print("companies  ${AppCubit.get(context).getCompanies(userId: CashHelper.getData(key: "isUid"))}");
-    print("branches  ${AppCubit.get(context).getBranches(userId: CashHelper.getData(key: "isUid"))}");
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {
-        if(state is SignOutSuccessState) {
+        if (state is SignOutSuccessState) {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => const LoginScreen(),
-              )
-          );
-
-        };
+              ));
+          CashHelper.removeData(key: "isUid");
+        }
       },
       builder: (context, state) {
         var cubit = AppCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title:  Text(cubit.companyModel!.name!,style: const TextStyle(color: ColorManager.blackColor),),
+            title: Text(
+              cubit.user!.name!,
+              style: const TextStyle(color: ColorManager.blackColor),
+            ),
             centerTitle: true,
             actions: [
               Padding(
@@ -67,45 +64,55 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ),
-          body: SizedBox(
-            height: double.infinity,
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.sizeOf(context).height * .3,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        gradient: const LinearGradient(colors: [
-                          ColorManager.whiteColor,
-                          ColorManager.greyColor,
-                        ])),
-                    child: Image.network(cubit.companyModel!.logo!),
+          body: state is GetCompaniesErrorState ||
+                  state is GetBranchesErrorState
+              ? const SizedBox(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Center(
+                    child: Text("There is no Company "),
                   ),
-                  SizedBox(
-                    height: MediaQuery.sizeOf(context).height * .05,
+                )
+              : SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: MediaQuery.sizeOf(context).height * .3,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              gradient: const LinearGradient(colors: [
+                                ColorManager.whiteColor,
+                                ColorManager.greyColor,
+                              ])),
+                          child: Image.network(cubit.companyModel!.logo!),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * .05,
+                        ),
+                        const Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("Branch", style: TextStyle(fontSize: 20))),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * .03,
+                        ),
+                        Row(
+                          children: [
+                            BranchWidget(
+                              branchName: cubit.branchModel!.name!,
+                              logoPath: cubit.branchModel!.logo!,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                  const Align(
-                      alignment: Alignment.topLeft, child: Text("Branch")),
-                  SizedBox(
-                    height: MediaQuery.sizeOf(context).height * .05,
-                  ),
-                  Row(
-                    children: [
-                      BranchWidget(
-                        branchName: cubit.branchModel?.name??"Maher Branch",
-                        logoPath: cubit.branchModel?.logo ?? "",
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
+                ),
         );
       },
     );

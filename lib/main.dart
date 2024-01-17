@@ -43,17 +43,15 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (BuildContext context) =>
           AppCubit()
-            ..getUser()
-            ..getCompanies( userId: uId == null ? uId = '' : uId!)
-            ..getBranches(userId: uId == null ? uId = '' : uId!),
+            ..getUser(id: uId == null ? uId = '' : uId!)
+            ..getCompanies()
+            ..getBranches(),
         ),
       ],
       child:   ScreenUtilInit(
         designSize: const Size(150, 500),
         child: BlocConsumer<AppCubit, AppState>(
-          listener: (context, state) {
-            // TODO: implement listener
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             return const MaterialApp(
               debugShowCheckedModeBanner: false,

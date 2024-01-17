@@ -23,6 +23,10 @@ class LoginWithGoogleLoadingState extends AppState {}
 class LoginWithGoogleSuccessState extends AppState {}
 class LoginWithGoogleErrorState extends AppState {}
 
+class SaveUserLoadingState extends AppState{}
+class SaveUserSuccessState extends AppState{}
+class SaveUserErrorState extends AppState{}
+
 class SignOutLoadingState extends AppState{}
 class SignOutSuccessState extends AppState{}
 
@@ -33,3 +37,4 @@ class GetCompaniesErrorState extends AppState{}
 class GetBranchesLoadingState extends AppState{}
 class GetBranchesSuccessState extends AppState{}
 class GetBranchesErrorState extends AppState{}
+
