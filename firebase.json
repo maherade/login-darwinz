@@ -6,7 +6,6 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "source": "build/web",
     "frameworksBackend": {
       "region": "us-central1"
     }

@@ -144,6 +144,8 @@ class SignUpScreen extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             cubit.signInWithGoogle();
+                            cubit.getCompanies();
+                            cubit.getBranches();
                           },
                           child: Container(
                             width: MediaQuery.sizeOf(context).width * .3,
