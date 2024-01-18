@@ -2,8 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:login_task/presentations/screens/home_screen/home_screen.dart';
-import 'package:login_task/presentations/screens/login_screen/login_screen.dart';
 import 'package:login_task/presentations/screens/signup_screen/signup_screen.dart';
 import 'business_logic/cubit/app_cubit.dart';
 import 'constants/constatnts.dart';
@@ -55,7 +53,7 @@ class _MyAppState extends State<MyApp> {
           builder: (context, state) {
             return const MaterialApp(
               debugShowCheckedModeBanner: false,
-              home: LoginScreen(),
+              home: SignUpScreen(),
             );
           },
         ),

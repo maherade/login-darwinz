@@ -46,18 +46,20 @@ class LoginScreen extends StatelessWidget {
         var cubit = AppCubit.get(context);
         return SafeArea(
           child: Scaffold(
+            extendBodyBehindAppBar: true,
             body: Container(
               height: double.infinity,
               width: double.infinity,
               decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  ColorManager.whiteColor,
-                  ColorManager.greyColor,
-                ],
-              )),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    ColorManager.whiteColor,
+                    ColorManager.greyColor,
+                  ],
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(15),
                 child: Form(
