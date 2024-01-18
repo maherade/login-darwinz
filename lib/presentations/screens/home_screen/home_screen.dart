@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_task/business_logic/cubit/app_cubit.dart';
-import 'package:login_task/core/local/cash_helper.dart';
 import 'package:login_task/presentations/widgets/branch_widget.dart';
 import 'package:login_task/styles/colors/color_manager.dart';
 import '../login_screen/login_screen.dart';
@@ -24,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
               MaterialPageRoute(
                 builder: (context) => const LoginScreen(),
               ));
-          CashHelper.removeData(key: "isUid");
         }
       },
       builder: (context, state) {
@@ -64,8 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ),
-          body: state is GetCompaniesErrorState ||
-                  state is GetBranchesErrorState
+          body: cubit.user!.uId == " " ||
+                  cubit.companyModel == null ||
+                  cubit.branchModel == null
               ? const SizedBox(
                   width: double.infinity,
                   height: double.infinity,
@@ -81,34 +80,41 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          width: double.infinity,
-                          height: MediaQuery.sizeOf(context).height * .3,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              gradient: const LinearGradient(colors: [
-                                ColorManager.whiteColor,
-                                ColorManager.greyColor,
-                              ])),
-                          child: Image.network(cubit.companyModel!.logo!),
-                        ),
+                        cubit.companyModel!.logo == ""
+                            ? const SizedBox()
+                            : Container(
+                                width: double.infinity,
+                                height: MediaQuery.sizeOf(context).height * .3,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      ColorManager.whiteColor,
+                                      ColorManager.greyColor,
+                                    ],
+                                  ),
+                                ),
+                                child: Image.network(cubit.companyModel!.logo!),
+                              ),
                         SizedBox(
                           height: MediaQuery.sizeOf(context).height * .05,
                         ),
                         const Align(
                             alignment: Alignment.topLeft,
-                            child: Text("Branch", style: TextStyle(fontSize: 20))),
+                            child:
+                                Text("Branch", style: TextStyle(fontSize: 20))),
                         SizedBox(
                           height: MediaQuery.sizeOf(context).height * .03,
                         ),
-                        Row(
-                          children: [
-                            BranchWidget(
+                       cubit.branchModel!.logo == "" ? const SizedBox() :
+                       Row(
+                         children: [
+                           BranchWidget(
                               branchName: cubit.branchModel!.name!,
                               logoPath: cubit.branchModel!.logo!,
                             ),
-                          ],
-                        )
+                         ],
+                       ),
                       ],
                     ),
                   ),

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:login_task/business_logic/cubit/app_cubit.dart';
+import 'package:login_task/core/local/cash_helper.dart';
 import 'package:login_task/presentations/screens/home_screen/home_screen.dart';
 import 'package:login_task/presentations/widgets/default_text_field.dart';
 import 'package:login_task/presentations/widgets/defualtButton.dart';
 import 'package:login_task/styles/colors/color_manager.dart';
-import '../../../core/local/cash_helper.dart';
-import '../login_screen/login_screen.dart';
+ import '../login_screen/login_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -42,6 +42,7 @@ class SignUpScreen extends StatelessWidget {
         var cubit = AppCubit.get(context);
         return SafeArea(
           child: Scaffold(
+            extendBodyBehindAppBar: true,
             body: Container(
               height: double.infinity,
               width: double.infinity,
@@ -55,7 +56,7 @@ class SignUpScreen extends StatelessWidget {
                 ],
               )),
               child: Padding(
-                padding:   EdgeInsets.all(MediaQuery.sizeOf(context).width * .05),
+                padding: const EdgeInsets.all(15),
                 child: Form(
                   key: formKey,
                   child: SingleChildScrollView(
@@ -65,23 +66,20 @@ class SignUpScreen extends StatelessWidget {
                         // Image for sign up
                         Image.asset(
                           'assets/images/sign_up.png',
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          width: MediaQuery.of(context).size.width * .4,
+                          height: MediaQuery.of(context).size.height * 0.35,
+                          width: MediaQuery.of(context).size.width * .35,
                           fit: BoxFit.contain,
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
                         ),
                         // Sign Up Text
                         Text(
                           "Sign Up",
                           style: TextStyle(
-                            fontSize: 5.sp,
+                            fontSize: 3.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
+                          height: MediaQuery.of(context).size.height * .02,
                         ),
                         //Text field for name
                         DefaultTextField(
@@ -90,7 +88,7 @@ class SignUpScreen extends StatelessWidget {
                             controller: nameController,
                             textInputType: TextInputType.text),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02,
+                          height: MediaQuery.of(context).size.height * .02,
                         ),
                         //Text field for email
                         DefaultTextField(
@@ -99,7 +97,7 @@ class SignUpScreen extends StatelessWidget {
                             controller: emailController,
                             textInputType: TextInputType.emailAddress),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02,
+                          height: MediaQuery.of(context).size.height * .02,
                         ),
                         //Text field for password
                         DefaultTextField(
@@ -108,7 +106,7 @@ class SignUpScreen extends StatelessWidget {
                             controller: passwordController,
                             textInputType: TextInputType.text),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02,
+                          height: MediaQuery.of(context).size.height * .02,
                         ),
                         // Sign Up Button
                         state is SignUpLoadingState
@@ -116,7 +114,6 @@ class SignUpScreen extends StatelessWidget {
                                 color: Colors.blue,
                               )
                             : DefaultButton(
-                          width: MediaQuery.sizeOf(context).width >=150? MediaQuery.sizeOf(context).width * .3 : MediaQuery.sizeOf(context).width * .2,
                           buttonText: "Sign Up ",
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
@@ -125,12 +122,13 @@ class SignUpScreen extends StatelessWidget {
                                         passwordController.text,
                                         nameController.text);
                                   }
+                                  cubit.getUser(id: CashHelper.getData(key: "isUid"));
                                   cubit.getCompanies();
                                   cubit.getBranches();
                                 },
                               ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02,
+                          height: MediaQuery.of(context).size.height * 0.01,
                         ),
                         // Or Text
                         const Text(
@@ -144,6 +142,7 @@ class SignUpScreen extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             cubit.signInWithGoogle();
+                            cubit.getUser(id: CashHelper.getData(key: "isUid"));
                             cubit.getCompanies();
                             cubit.getBranches();
                           },

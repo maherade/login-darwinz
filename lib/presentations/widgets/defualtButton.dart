@@ -37,7 +37,7 @@ class DefaultButton extends StatelessWidget {
       ),
       constraints: BoxConstraints(
         maxWidth: 70.w,
-        minWidth: 65.w,
+        minWidth: 60.w,
         minHeight: MediaQuery.sizeOf(context).height * .05,
       ),
 

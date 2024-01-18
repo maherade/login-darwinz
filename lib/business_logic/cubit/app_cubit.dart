@@ -119,7 +119,7 @@ class AppCubit extends Cubit<AppState> {
       }
     } on FirebaseAuthException catch (e) {
       emit(LoginErrorState());
-      print("-----------Login Failed");
+      print("-----------Login Failed $e");
       customToast(
           title: 'Invalid email or password', color: ColorManager.redColor);
     } catch (e) {
@@ -152,13 +152,13 @@ class AppCubit extends Cubit<AppState> {
         return;
       }
       // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
 
       // Once signed in, return the UserCredential
@@ -175,6 +175,8 @@ class AppCubit extends Cubit<AppState> {
   signOut() async {
     emit(SignOutLoadingState());
     await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
+    CashHelper.removeData(key: "isUid");
     emit(SignOutSuccessState());
   }
 

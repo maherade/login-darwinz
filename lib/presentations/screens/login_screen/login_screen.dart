@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:login_task/business_logic/cubit/app_cubit.dart';
-import 'package:login_task/core/local/cash_helper.dart';
 import 'package:login_task/presentations/screens/home_screen/home_screen.dart';
 import 'package:login_task/presentations/screens/signup_screen/signup_screen.dart';
 import 'package:login_task/styles/colors/color_manager.dart';
@@ -24,9 +23,12 @@ class LoginScreen extends StatelessWidget {
           passwordController.clear();
           AppCubit.get(context).getCompanies();
           AppCubit.get(context).getBranches();
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ), (route) => false );
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ),
+              (route) => false);
         }
 
         if (state is LoginSuccessState) {
@@ -57,9 +59,7 @@ class LoginScreen extends StatelessWidget {
                 ],
               )),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.sizeOf(context).width * .05,
-                    vertical: MediaQuery.sizeOf(context).height * .05),
+                padding: const EdgeInsets.all(15),
                 child: Form(
                   key: formKey,
                   child: SingleChildScrollView(
@@ -69,8 +69,8 @@ class LoginScreen extends StatelessWidget {
                         // Image for login
                         Image.asset(
                           'assets/images/login.png',
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          width: MediaQuery.of(context).size.width * .4,
+                          height: MediaQuery.of(context).size.height * 0.35,
+                          width: MediaQuery.of(context).size.width * .35,
                           fit: BoxFit.contain,
                         ),
                         SizedBox(
@@ -80,7 +80,7 @@ class LoginScreen extends StatelessWidget {
                         Text(
                           "Login",
                           style: TextStyle(
-                            fontSize: 5.sp,
+                            fontSize: 3.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -94,7 +94,7 @@ class LoginScreen extends StatelessWidget {
                             controller: emailController,
                             textInputType: TextInputType.emailAddress),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
+                          height: MediaQuery.of(context).size.height * 0.02,
                         ),
 
                         //Text field for password
@@ -104,7 +104,7 @@ class LoginScreen extends StatelessWidget {
                             controller: passwordController,
                             textInputType: TextInputType.text),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
+                          height: MediaQuery.of(context).size.height * 0.02,
                         ),
 
                         // Login button
@@ -135,7 +135,7 @@ class LoginScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 16),
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
+                          height: MediaQuery.of(context).size.height * 0.02,
                         ),
                         // Login with Google
                         state is LoginWithGoogleLoadingState
@@ -163,7 +163,7 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
+                          height: MediaQuery.of(context).size.height * 0.02,
                         ),
 
                         // Don't have an account?

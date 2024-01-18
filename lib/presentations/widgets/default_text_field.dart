@@ -41,44 +41,42 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
   Widget build(BuildContext context) {
     return widget.isPass == false
         ? Container(
-      width: MediaQuery.sizeOf(context).width >=150? MediaQuery.sizeOf(context).width * .3 : MediaQuery.sizeOf(context).width * .2,
-
-      padding: const EdgeInsets.symmetric(
+            width: MediaQuery.sizeOf(context).width >= 150
+                ? MediaQuery.sizeOf(context).width * .3
+                : MediaQuery.sizeOf(context).width * .2,
+            padding: const EdgeInsets.symmetric(
               vertical: 0,
               horizontal: 0,
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
             ),
-      constraints: BoxConstraints(
-        maxWidth: 70.w,
-        minWidth: 65.w,
-      ),
-
-
-      child: TextFormField(
+            constraints: BoxConstraints(
+              maxWidth: 70.w,
+              minWidth: 60.w,
+            ),
+            child: TextFormField(
               textInputAction: TextInputAction.next,
               style: const TextStyle(
                 fontSize: 16.0,
-                color: ColorManager.blackColor,
+                color: ColorManager.textColor,
               ),
               decoration: InputDecoration(
                 hintText: widget.hintText,
-                hintStyle: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w300,
-                    color: widget.hintColor),
+                hintStyle: TextStyle(fontSize: 16.0, color: widget.hintColor),
                 prefixIcon: Icon(
                   widget.prefixIcon,
                   color: Colors.grey,
                 ),
                 border: InputBorder.none,
                 enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(color: Colors.white)),
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(color: Colors.white),
+                ),
                 focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(color: Colors.white)),
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(color: Colors.white),
+                ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -105,21 +103,21 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
             ),
           )
         : Container(
-      width: MediaQuery.sizeOf(context).width >=150? MediaQuery.sizeOf(context).width * .3 : MediaQuery.sizeOf(context).width * .2,
-
-      padding: const EdgeInsets.symmetric(
+            width: MediaQuery.sizeOf(context).width >= 150
+                ? MediaQuery.sizeOf(context).width * .3
+                : MediaQuery.sizeOf(context).width * .2,
+            padding: const EdgeInsets.symmetric(
               vertical: 0,
               horizontal: 0,
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
             ),
-      constraints: BoxConstraints(
-        maxWidth: 70.w,
-        minWidth: 65.w,
-      ),
-
-             child: TextFormField(
+            constraints: BoxConstraints(
+              maxWidth: 70.w,
+              minWidth: 60.w,
+            ),
+            child: TextFormField(
               textInputAction: TextInputAction.done,
               style: const TextStyle(
                 fontSize: 15.0,
