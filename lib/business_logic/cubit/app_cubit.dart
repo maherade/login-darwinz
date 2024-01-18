@@ -154,15 +154,23 @@ class AppCubit extends Cubit<AppState> {
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-
       // Once signed in, return the UserCredential
       await FirebaseAuth.instance.signInWithCredential(credential);
+      user = UserModel(
+        uId: googleUser.id,
+        name: googleUser.displayName,
+        email: googleUser.email,
+      );
+      FirebaseFirestore.instance.collection('Users').doc(googleUser.id).set(
+        user!.toJson(),
+      ) .then((value) {
+        emit(LoginSuccessState());
+      });
       CashHelper.saveData(key: "isUid", value: googleUser.id);
       emit(LoginSuccessState());
     } catch (error) {
@@ -190,14 +198,20 @@ class AppCubit extends Cubit<AppState> {
         .doc(CashHelper.getData(key: "isUid"))
         .get()
         .then((value) {
-      companyModel = CompanyModel.fromJson(value.data()!);
+      if (value.data() != null) {
+        companyModel = CompanyModel.fromJson(value.data()!);
+      }else{
+        companyModel = CompanyModel(uId: " ", name: " ", logo: " ");
+      }
       emit(GetCompaniesSuccessState());
       print("Company Name is : ${companyModel!.name}");
       print("Company Logo is : ${companyModel!.logo}");
     }).catchError((error) {
-      companyModel = CompanyModel(uId: " ", name: " ", logo: " ");
       emit(GetCompaniesErrorState());
+      companyModel = CompanyModel(uId: " ", name: " ", logo: " ");
       print("error in get Companies is : $error");
+      print("Error Company Name is : ${companyModel!.name}");
+      print("Error Company Logo is : ${companyModel!.logo}");
     });
   }
 
@@ -211,14 +225,19 @@ class AppCubit extends Cubit<AppState> {
         .doc(CashHelper.getData(key: "isUid"))
         .get()
         .then((value) {
-      branchModel = BranchModel.fromJson(value.data()!);
+      if (value.data() != null) {
+        branchModel = BranchModel.fromJson(value.data()!);
+      } else {
+        branchModel = BranchModel(uId: " ", name: " ", logo: " ");
+      }
       emit(GetBranchesSuccessState());
       print("Branch Name is : ${branchModel!.name}");
       print("Branch Logo is : ${branchModel!.logo}");
     }).catchError((error) {
-      branchModel = BranchModel(uId: " ", name: " ", logo: " ");
       emit(GetBranchesErrorState());
+      branchModel = BranchModel(uId: " ", name: " ", logo: " ");
       print("error in get Branchs is : $error");
+      print("Error Branch Name is : ${branchModel.toString()}");
     });
   }
 }

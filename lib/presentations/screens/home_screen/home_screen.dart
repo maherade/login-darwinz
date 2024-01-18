@@ -27,10 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       builder: (context, state) {
         var cubit = AppCubit.get(context);
-        return Scaffold(
+        return  Scaffold(
           appBar: AppBar(
             title: Text(
-              cubit.user!.name!,
+             cubit.user!.uId ==null? " ":  cubit.user!.name!,
               style: const TextStyle(color: ColorManager.blackColor),
             ),
             centerTitle: true,
@@ -62,9 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ),
-          body: cubit.user!.uId == " " ||
-                  cubit.companyModel == null ||
-                  cubit.branchModel == null
+          body:
+          cubit.user!.uId ==null||
+          cubit.companyModel!.uId == " " ||
+                  cubit.companyModel!.logo == " " ||
+                  cubit.branchModel!.name == " "
               ? const SizedBox(
                   width: double.infinity,
                   height: double.infinity,

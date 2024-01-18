@@ -25,6 +25,8 @@ class SignUpScreen extends StatelessWidget {
           emailController.clear();
           passwordController.clear();
           nameController.clear();
+          AppCubit.get(context).getCompanies();
+          AppCubit.get(context).getBranches();
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
           builder: (context) => const HomeScreen(),
         ), (route) => false );

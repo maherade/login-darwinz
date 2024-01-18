@@ -30,17 +30,6 @@ class LoginScreen extends StatelessWidget {
               ),
               (route) => false);
         }
-
-        if (state is LoginSuccessState) {
-          AppCubit.get(context).getCompanies();
-          AppCubit.get(context).getBranches();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-          );
-        }
       },
       builder: (context, state) {
         var cubit = AppCubit.get(context);
